@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>微博</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:"Microsoft YaHei","PingFang SC",sans-serif;background:#f5f5f5;color:#333}
+  .container{max-width:500px;margin:0 auto;background:#fff;min-height:100vh}
+  .top-bar{background:#fff;padding:12px 15px;border-bottom:1px solid #e8e8e8;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:10}
+  .top-bar .back{font-size:18px;color:#333;cursor:pointer;text-decoration:none}
+  .top-bar .title{font-weight:bold;font-size:16px;flex:1}
+
+  .profile-header{padding:25px 15px 15px;text-align:center;background:#fff}
+  .profile-header .avatar{width:70px;height:70px;background:#e8e8e8;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:35px;color:#ccc}
+  .profile-header .nickname{font-size:18px;font-weight:bold;margin:8px 0 2px}
+  .profile-header .uid{font-size:12px;color:#999}
+  .profile-header .stats{display:flex;justify-content:center;gap:30px;margin-top:15px;font-size:13px}
+  .profile-header .stats span{text-align:center}
+  .profile-header .stats .num{font-weight:bold;display:block;font-size:16px}
+  .profile-header .stats .label{color:#999;font-size:11px}
+
+  .divider{height:8px;background:#f5f5f5}
+
+  .post-list{padding:0}
+  .post-item{padding:15px;border-bottom:1px solid #f0f0f0}
+  .post-item .post-time{font-size:12px;color:#eb7340;margin-bottom:8px}
+  .post-item .post-text{font-size:14px;line-height:1.8;color:#333}
+  .post-item .post-actions{display:flex;gap:30px;margin-top:10px;font-size:12px;color:#999}
+  .post-item .post-comments{background:#f9f9f9;padding:10px;margin-top:8px;border-radius:4px;font-size:12px}
+  .post-item .post-comments .cmt{margin:4px 0;color:#666}
+  .post-item .post-comments .cmt-name{color:#eb7340}
+  .post-item .cannot-open{cursor:default;opacity:0.6}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="top-bar">
+  <span class="back">‹</span>
+  <span class="title">李宜明的微博</span>
+</div>
+
+<div class="profile-header">
+  <div class="avatar">👤</div>
+  <p class="nickname">李宜明</p>
+  <p class="uid">@yiming_2011</p>
+  <div class="stats">
+    <span><span class="num">47</span><span class="label">关注</span></span>
+    <span><span class="num">3</span><span class="label">粉丝</span></span>
+    <span><span class="num">126</span><span class="label">微博</span></span>
+  </div>
+  <p style="font-size:12px;color:#999;margin-top:8px">简介：。</p>
+</div>
+
+<div class="divider"></div>
+
+<div class="post-list">
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2026-02-14 23:59</p>
+    <p class="post-text">今天路过学校。操场在翻修。跑道挖掉了。我站了一会儿。走了。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 1</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2026-01-01 00:00</p>
+    <p class="post-text">新年好。我还在这里。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 2</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2025-11-03 03:17</p>
+    <p class="post-text">失眠。数了三千只羊。它们都在看我。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 0</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2025-08-17 22:08</p>
+    <p class="post-text">今天是我生日吗。我不确定。没有人告诉我。我也不记得。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 1</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2025-06-22 15:44</p>
+    <p class="post-text">下雨了。雨水打在窗台上。每一滴都是一样的声音。每一滴。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 0</span></div>
+  </div>
+
+  <div class="post-item">
+    <p class="post-time">2025-03-07 18:30</p>
+    <p class="post-text">家里的门锁坏了。换了一个。新密码是一个四位数。不是我的生日。不是任何人的生日。是一个永远不会记起。也不会忘记的数字。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 4</span><span>赞 3</span></div>
+    <div class="post-comments">
+      <p class="cmt"><span class="cmt-name">今天也很困：</span>什么密码还要四位数的 不会是0000吧</p>
+      <p class="cmt"><span class="cmt-name">不吃香菜：</span>所以是什么日子？</p>
+      <p class="cmt"><span class="cmt-name" style="color:#333;font-weight:bold">李宜明 回复 不吃香菜：</span>一个不存在的日子。</p>
+      <p class="cmt"><span class="cmt-name">用户已注销：</span>我懂了。但我不说。</p>
+    </div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2025-01-20 09:12</p>
+    <p class="post-text">早晨照镜子。镜子里的人对我笑了一下。我先笑还是他先笑。记不清了。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 1</span><span>赞 0</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2024-12-31 23:59</p>
+    <p class="post-text">明年见。如果我还在的话。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 4</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2024-10-09 02:33</p>
+    <p class="post-text">做了一个梦。梦里大家都在。我叫你们的名字。你们没听见。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 1</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2024-07-11 14:56</p>
+    <p class="post-text">今天有人说我很眼熟。问我叫什么。我说了。他说没听过。然后他说。不对。我好像认识你。又不认识。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 2</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2024-04-04 00:00</p>
+    <p class="post-text">清明。给不认识的人扫了墓。不知道为什么要去。但去了。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 0</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2024-02-29 20:20</p>
+    <p class="post-text">今天是2月29日。四年一次。像一个不存在的人。偶尔被记起来。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 1</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2023-11-17 05:05</p>
+    <p class="post-text">天还没亮。我在窗边站了很久。街灯一盏一盏灭掉。没有人经过。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 0</span></div>
+  </div>
+
+  <div class="post-item cannot-open">
+    <p class="post-time">2023-08-01 12:00</p>
+    <p class="post-text">八月的第一天。很热。蝉鸣吵得人听不见自己说话。但我在心里说了一句。没人听见。</p>
+    <div class="post-actions"><span>转发 0</span><span>评论 0</span><span>赞 1</span></div>
+  </div>
+
+</div>
+
+</div>
+</body>
+</html>
