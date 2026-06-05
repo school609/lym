@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>乐家和智能家居锁</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+    background:#f0f2f5;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:10px;
+    transition:background 0s;
+  }
+  body.black-bg{background:#000}
+
+  .app{
+    width:100%;
+    max-width:400px;
+    background:#fff;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 4px 20px rgba(0,0,0,0.1);
+  }
+  .app-bar{
+    background:#2c3e2d;
+    color:#fff;
+    padding:15px;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:2px;
+  }
+  .app-body{padding:25px 20px}
+  .app-body .greeting{text-align:center;font-size:14px;color:#2c3e2d;margin-bottom:20px}
+  .app-body .info{background:#f9faf9;padding:15px;border-radius:8px;margin-bottom:20px;font-size:13px;color:#666;line-height:2}
+  .app-body .lock-name{text-align:center;font-size:16px;font-weight:bold;color:#333;margin-bottom:15px}
+  .app-body .lock-name span{display:block;font-size:12px;color:#999;font-weight:normal;margin-top:2px}
+  .input-box{
+    width:100%;
+    padding:14px;
+    border:2px solid #2c3e2d;
+    border-radius:8px;
+    font-size:22px;
+    text-align:center;
+    letter-spacing:10px;
+    margin-bottom:15px;
+    outline:none
+  }
+  .btn{
+    display:block;
+    width:100%;
+    padding:14px;
+    background:#2c3e2d;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    letter-spacing:2px;
+  }
+  .btn:active{background:#1a2a1b}
+  .error{color:#c0392b;text-align:center;font-size:12px;margin-top:8px;min-height:18px}
+</style>
+</head>
+<body id="bodyEl">
+<div class="app" id="appEl">
+
+  <div class="app-bar">乐家和智能家居锁</div>
+
+  <div class="app-body">
+    <p class="greeting">乐家和为您服务！</p>
+    <p class="info">本司电子锁产品出现故障无法打开时，可通过此APP手动输入密码实现智能开锁。请确保输入正确的开锁密码。</p>
+
+    <div class="lock-name">
+      家居锁-门锁1130
+      <span>当前状态：已锁定</span>
+    </div>
+
+    <input class="input-box" type="text" id="pwdInput" placeholder="输入密码" maxlength="4" onkeydown="if(event.key==='Enter')checkPwd()">
+    <button class="btn" onclick="checkPwd()">开锁</button>
+    <p class="error" id="errorMsg"></p>
+  </div>
+
+</div>
+
+<script>
+var errorCount = 0;
+
+function checkPwd(){
+  var pwd = document.getElementById('pwdInput').value.trim();
+  if(pwd === '0230'){
+    document.getElementById('errorMsg').innerText = '';
+    triggerRedScreen();
+  } else if(pwd === ''){
+    document.getElementById('errorMsg').innerText = '请输入密码';
+  } else {
+    errorCount++;
+    document.getElementById('errorMsg').innerText = '密码错误（' + errorCount + '次）';
+  }
+}
+
+function triggerRedScreen(){
+  document.getElementById('appEl').style.display = 'none';
+  document.getElementById('bodyEl').classList.add('black-bg');
+
+  var container = document.createElement('div');
+  container.id = 'redContainer';
+  container.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;pointer-events:none;background:#000;';
+
+  var center = document.createElement('div');
+  center.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#ff0000;font-size:80px;font-weight:bold;text-align:center;z-index:10;text-shadow:0 0 40px #ff0000, 0 0 80px #ff0000;animation:pulse 0.8s ease-out;';
+  center.innerText = '欢迎回家';
+  container.appendChild(center);
+
+  var style = document.createElement('style');
+  style.textContent = '@keyframes pulse{0%{transform:translate(-50%,-50%) scale(0.5);opacity:0}50%{transform:translate(-50%,-50%) scale(1.2);opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}';
+  container.appendChild(style);
+
+  document.body.appendChild(container);
+
+  var count = 0;
+  var max = 400;
+  var batchSize = 8;
+
+  function spawnBatch(){
+    for(var i=0; i<batchSize; i++){
+      if(count >= max) return;
+      var txt = document.createElement('div');
+      txt.innerText = '欢迎回家';
+      var fontSize = Math.random() * 40 + 12;
+      txt.style.cssText = 'position:absolute;color:#ff0000;font-size:'+fontSize+'px;left:'+(Math.random()*96)+'%;top:'+(Math.random()*96)+'%;opacity:1;font-weight:'+(Math.random()>0.5?'bold':'normal')+';transform:rotate('+(Math.random()*40-20)+'deg);text-shadow:0 0 15px #ff0000;pointer-events:none;z-index:5;';
+      container.appendChild(txt);
+      count++;
+      if(count >= max) break;
+    }
+    if(count < max){
+      requestAnimationFrame(spawnBatch);
+    }
+  }
+  requestAnimationFrame(spawnBatch);
+}
+</script>
+</body>
+</html>
