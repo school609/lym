@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>微信聊天</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    font-family:"Microsoft YaHei","PingFang SC",sans-serif;
+    background:#ededed;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:10px;
+  }
+  .phone{
+    width:100%;
+    max-width:400px;
+    height:90vh;
+    max-height:700px;
+    background:#f5f5f5;
+    border-radius:12px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 4px 20px rgba(0,0,0,0.15);
+  }
+  .top-bar{
+    background:#1a1a1a;
+    color:#fff;
+    padding:12px 16px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:16px;
+    font-weight:bold;
+  }
+  .top-bar .back{font-size:20px}
+  .top-bar .name{flex:1}
+  .top-bar .dots{font-size:18px;letter-spacing:2px}
+  .chat-area{
+    flex:1;
+    overflow-y:auto;
+    padding:16px 12px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    background:#f5f5f5;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .msg{max-width:75%;padding:10px 14px;border-radius:8px;font-size:15px;line-height:1.6;position:relative;word-break:break-word}
+  .msg.left{background:#fff;align-self:flex-start;border-radius:8px 8px 8px 2px;color:#333}
+  .msg.right{background:#95ec69;align-self:flex-end;border-radius:8px 8px 2px 8px;color:#000}
+  .msg.inner{background:#f0f0f0;align-self:flex-end;border-radius:6px;font-size:13px;color:#666;font-style:italic;max-width:70%;border:1px dashed #ccc}
+  .time-tag{text-align:center;font-size:12px;color:#999;margin:4px 0}
+  .input-bar{
+    background:#fff;
+    padding:10px 12px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    border-top:1px solid #ddd;
+  }
+  .input-bar input{
+    flex:1;
+    padding:8px 12px;
+    border:1px solid #ddd;
+    border-radius:20px;
+    font-size:14px;
+    background:#f9f9f9;
+    outline:none;
+  }
+  .input-bar button{
+    width:36px;height:36px;
+    border-radius:50%;
+    background:#95ec69;
+    border:none;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .msg-hidden{opacity:0;transform:translateY(10px);transition:all 0.3s ease}
+  .msg-show{opacity:1;transform:translateY(0)}
+  .tap-hint{
+    text-align:center;
+    font-size:11px;
+    color:#bbb;
+    margin:4px 0;
+    animation:blink 2s infinite;
+  }
+  @keyframes blink{
+    0%,100%{opacity:0.3}
+    50%{opacity:1}
+  }
+  .ripple{
+    position:fixed;
+    width:20px;height:20px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.08);
+    pointer-events:none;
+    animation:rippleOut 0.5s ease-out forwards;
+  }
+  @keyframes rippleOut{
+    to{width:80px;height:80px;opacity:0;margin-left:-30px;margin-top:-30px}
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="top-bar">
+    <span class="back">‹</span>
+    <span class="name">老同学</span>
+    <span class="dots">···</span>
+  </div>
+  
+  <div class="chat-area" id="chatArea">
+    <div class="time-tag">今天 14:32</div>
+  </div>
+  
+  <div class="input-bar">
+    <input type="text" placeholder="" disabled>
+    <button>↑</button>
+  </div>
+</div>
+
+<script>
+var messages = [
+  {type:'left', text:'咱们班李宜明死了，老师同学们组织了追悼会，你要来吗？'},
+  {type:'right', text:'李宜明？'},
+  {type:'inner', text:'（李宜明是谁？）'},
+  {type:'left', text:'对啊，就是咱们学校当时的人气王，咱班老赵的心头肉，这么久没联系，没想到再次听到消息居然是逝世。'},
+  {type:'right', text:'……来。'},
+  {type:'left', text:'周六上午十点，市殡仪馆。'},
+  {type:'inner', text:'（我不记得这个名字。）'},
+  {type:'inner', text:'（……我得去看看。）'}
+];
+
+var currentIndex = 0;
+var isWaiting = false;
+var chatArea = document.getElementById('chatArea');
+
+chatArea.addEventListener('click', function(e){
+  var ripple = document.createElement('div');
+  ripple.className = 'ripple';
+  ripple.style.left = e.clientX + 'px';
+  ripple.style.top = e.clientY + 'px';
+  document.body.appendChild(ripple);
+  setTimeout(function(){ripple.remove()}, 500);
+});
+
+function createMsg(type, text, delay){
+  return new Promise(function(resolve){
+    setTimeout(function(){
+      var div = document.createElement('div');
+      div.className = 'msg ' + type + ' msg-hidden';
+      div.innerText = text;
+      chatArea.appendChild(div);
+      
+      setTimeout(function(){
+        div.classList.add('msg-show');
+      }, 50);
+      
+      chatArea.scrollTop = chatArea.scrollHeight;
+      resolve();
+    }, delay);
+  });
+}
+
+function showNext(){
+  if(currentIndex >= messages.length){
+    isWaiting = false;
+    return;
+  }
+  
+  var msg = messages[currentIndex];
+  
+  if(msg.type === 'right' || msg.type === 'inner'){
+    isWaiting = true;
+    return;
+  }
+  
+  currentIndex++;
+  var delay = 800 + Math.random() * 600;
+  
+  createMsg(msg.type, msg.text, delay).then(function(){
+    if(currentIndex < messages.length){
+      setTimeout(showNext, 500);
+    }
+  });
+}
+
+chatArea.addEventListener('click', function(){
+  if(!isWaiting) return;
+  if(currentIndex >= messages.length) return;
+  
+  isWaiting = false;
+  var msg = messages[currentIndex];
+  currentIndex++;
+  
+  createMsg(msg.type, msg.text, 200).then(function(){
+    setTimeout(showNext, 400);
+  });
+});
+
+setTimeout(showNext, 1000);
+</script>
+</body>
+</html>
